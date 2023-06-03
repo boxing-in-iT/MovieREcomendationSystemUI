@@ -21,20 +21,30 @@ import MovieLibrary from "./components/pages/MovieLibrary";
 import MovieDetail from "./components/pages/MovieDetail";
 import AboutProject from "./components/pages/AboutProject";
 
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Login } from "./login/Login";
+
 function App() {
   return (
     <>
       <GlobalStyles />
       <ThemeProvider theme={dark}>
-        <BrowserRouter>
           <Navigation />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/movieLibrary" element={<MovieLibrary />} />
             <Route path="/movies/:id" element={<MovieDetail />} />
             <Route path="/about" element={<AboutProject />} />
+            <Route
+                        path="/myRecs"
+                        element={
+                            <PrivateRoute>
+                                <Recommendations />
+                            </PrivateRoute>
+                        }
+                    />
+            <Route path="/login" element={<Login/>}/>
           </Routes>
-        </BrowserRouter>
       </ThemeProvider>
     </>
   );
