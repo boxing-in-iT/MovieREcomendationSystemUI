@@ -6,10 +6,55 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { history } from "../../_helpers/history";
 import { authActions } from "../../_store";
+import styled from 'styled-components';
 
 export { Login };
 
-function Login() {
+const LoginPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: ${(props) => props.theme.text};
+`;
+
+const LoginForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background: #f1f1f1;
+  border-radius: 5px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+`;
+
+const Label = styled.label`
+  margin-bottom: 5px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+`;
+
+const Login = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((x) => x.auth.user);
   const authError = useSelector((x) => x.auth.error);
@@ -37,48 +82,36 @@ function Login() {
   }
 
   return (
-    <div>
-      <div>
-        Username: test
-        <br />
-        Password: test
-      </div>
-      <div>
-        <h4>Login</h4>
-        <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label>Username</label>
-              <input
-                name="name"
-                type="text"
-                {...register("name")}
-                className={`form-control ${errors.rname ? "is-invalid" : ""}`}
-              />
-              <div>{errors.name?.message}</div>
-            </div>
-            <div>
-              <label>Password</label>
-              <input
-                name="password"
-                type="password"
-                {...register("password")}
-                className={`form-control ${
-                  errors.password ? "is-invalid" : ""
-                }`}
-              />
-              <div>{errors.password?.message}</div>
-            </div>
-            <button disabled={isSubmitting} className="btn btn-primary">
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
-              Login
-            </button>
-            {authError && <div>{authError.message}</div>}
-          </form>
-        </div>
-      </div>
-    </div>
+    <LoginPageContainer>
+      <LoginForm onSubmit={handleSubmit(onSubmit)}>
+        <FormGroup>
+          <Label>Username</Label>
+          <Input
+            name="name"
+            type="text"
+            {...register("name")}
+          />
+          <div>{errors.name?.message}</div>
+        </FormGroup>
+        <FormGroup>
+          <Label>Password</Label>
+          <Input
+            name="password"
+            type="password"
+            {...register("password")}
+          />
+          <div>{errors.password?.message}</div>
+        </FormGroup>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <span>Loading...</span>}
+          Login
+        </Button>
+        {/* {authError && <div>{authError.message}</div>} */}
+      </LoginForm>
+      </LoginPageContainer>
   );
 }
+
+export default Login;
+
+

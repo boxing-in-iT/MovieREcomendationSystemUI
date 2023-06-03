@@ -22,7 +22,7 @@ import MovieDetail from "./components/pages/MovieDetail";
 import AboutProject from "./components/pages/AboutProject";
 
 import { PrivateRoute } from "./components/PrivateRoute";
-import { Login } from "./login/Login";
+import { Login } from "./components/pages/Login";
 
 function App() {
   return (
