@@ -23,6 +23,7 @@ import AboutProject from "./components/pages/AboutProject";
 
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Login } from "./components/pages/Login";
+import Registration from "./components/pages/Registration";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                         }
                     />
             <Route path="/login" element={<Login/>}/>
+            <Route path="/registration" element={<Registration/>}/>
           </Routes>
       </ThemeProvider>
     </>

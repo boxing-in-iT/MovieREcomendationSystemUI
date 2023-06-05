@@ -42,6 +42,21 @@ const MenuItem = styled.li`
   }
 `;
 
+const AuthButtons = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const AuthButton = styled.button`
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.buttonText};
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
 const Navigation = () => {
   return (
     <>
@@ -62,6 +77,10 @@ const Navigation = () => {
               <Link to={"/about"}>About project</Link>
             </MenuItem>
           </Menu>
+          <AuthButtons>
+            <AuthButton><Link to={"/login"}>Login</Link></AuthButton>
+            <AuthButton><Link to={"/registration"}>Register</Link></AuthButton>
+          </AuthButtons>
         </NavBar>
       </Section>
     </>
