@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
 import { Link } from "react-router-dom";
+import AuthorButton from "./AuthorButtons";
 
 const Section = styled.div`
   width: 100vw;
@@ -77,10 +78,11 @@ const Navigation = () => {
               <Link to={"/about"}>About project</Link>
             </MenuItem>
           </Menu>
-          <AuthButtons>
+          <AuthorButton/>
+          {/* <AuthButtons>
             <AuthButton><Link to={"/login"}>Login</Link></AuthButton>
             <AuthButton><Link to={"/registration"}>Register</Link></AuthButton>
-          </AuthButtons>
+          </AuthButtons> */}
         </NavBar>
       </Section>
     </>

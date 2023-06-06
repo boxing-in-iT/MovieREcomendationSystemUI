@@ -106,7 +106,7 @@ const Login = () => {
           {isSubmitting && <span>Loading...</span>}
           Login
         </Button>
-        {/* {authError && <div>{authError.message}</div>} */}
+        {authError && <div>{authError.message}</div>}
       </LoginForm>
       </LoginPageContainer>
   );
