@@ -54,7 +54,6 @@ const Error = styled.div`
 
 const TestRegister = () => {
   const dispatch = useDispatch();
-  const registrationError = useSelector(state => state.alert.error); // Получаем ошибку из состояния Redux
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -76,18 +75,13 @@ const TestRegister = () => {
       favorites: [],
     };
 
-    try {
       await dispatch(userActions.register(user));
-    } catch (error) {
-      console.log('Error:', error);
-    }
   };
 
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
         <h2>Registration</h2>
-        {registrationError && <Error>{registrationError}</Error>} {/* Выводим ошибку, если она есть */}
         <FormGroup>
           <Label>Name:</Label>
           <Input type="text" name="name" />
