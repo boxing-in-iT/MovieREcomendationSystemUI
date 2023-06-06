@@ -27,8 +27,27 @@ function createExtraActions() {
     const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
 
     return {
+        register: register(),
         getAll: getAll()
-    };    
+    }; 
+    
+    function register(user) {
+        return createAsyncThunk(`${name}/register`, async (user) => {
+          try {
+            const response = await fetchWrapper.post(`${baseUrl}/register`, user);
+            return response.data; // Return the response data if needed
+          } catch (error) {
+            throw new Error('Registration failed'); // Handle the error if needed
+          }
+        });
+      }
+
+    // function register() {
+    //     return createAsyncThunk(
+    //         `${name}/register`,
+    //         async (user) => await fetchWrapper.post(`${baseUrl}/register`, user)
+    //     );
+    // }
 
     function getAll() {
         return createAsyncThunk(

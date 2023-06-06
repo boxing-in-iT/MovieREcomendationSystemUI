@@ -26,6 +26,7 @@ import { Login } from "./components/pages/Login";
 import Registration from "./components/pages/Registration";
 
 import { history } from './_helpers';
+import TestRegister from "components/pages/TestRegister";
 
 function App() {
 
@@ -50,7 +51,8 @@ function App() {
                         }
                     />
             <Route path="/login" element={<Login/>}/>
-            <Route path="/registration" element={<Registration/>}/>
+            {/* <Route path="/registration" element={<Registration/>}/> */}
+            <Route path="/test" element={<TestRegister/>}/>
           </Routes>
       </ThemeProvider>
     </>
