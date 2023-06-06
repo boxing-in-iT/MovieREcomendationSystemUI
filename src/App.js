@@ -25,7 +25,12 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { Login } from "./components/pages/Login";
 import Registration from "./components/pages/Registration";
 
+import { history } from './_helpers';
+
 function App() {
+
+  history.navigate = useNavigate();
+  history.location = useLocation();
   return (
     <>
       <GlobalStyles />
