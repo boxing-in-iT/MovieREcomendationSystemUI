@@ -11,6 +11,11 @@ const SearchBarContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
+const SearchTitle = styled.h1`
+  font-size: 1.5rem;
+  margin-right: 1rem;
+`;
+
 const SearchInput = styled.input`
   border: 2px solid #ccc;
   border-radius: 5px;
@@ -35,6 +40,16 @@ const SearchButton = styled.button`
   }
 `;
 
+const GenreButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const SortByGenres = styled.h2`
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+`;
+
 const Button = styled.button`
   margin-right: 10px;
   padding: 10px 15px;
@@ -56,6 +71,10 @@ const Button = styled.button`
     transform: translateY(0);
     box-shadow: none;
   }
+`;
+
+const SortTitle = styled.h1`
+  color:${(props) => props.theme.body};
 `;
 
 const GenreButtons = styled.div`
@@ -176,11 +195,15 @@ const MovieCards = () => {
 
   return (
     <Section>
-      <SearchBar
+    
+      <input
+      type="text"
+      placeholder="Search movie"
         searchQuery={searchQuery}
         handleSearchChange={handleSearchChange}
       />
       <GenreButtons>
+      <SortTitle>Sort by genre</SortTitle>
         {genres.map((genre) => (
           <Button
             key={genre}

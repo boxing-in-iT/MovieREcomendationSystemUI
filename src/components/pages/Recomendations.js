@@ -23,12 +23,10 @@ const Recommendations = () => {
 return (
   <div>
       <h1>Hi {authUser?.name}!</h1>
-      <p>You're logged in with React 18 + Redux & JWT!!</p>
-      <h3>Users from secure api end point:</h3>
       {users.length &&
           <ul>
               {users.map(user =>
-                  <li key={user.id}>{user.name} {user.name}</li>
+                  <li key={user.id}> {user.name}</li>
               )}
           </ul>
       }

@@ -220,6 +220,7 @@ const Home = () => {
         <Container>
           <Box>
             <Title>Welcome on IDBM</Title>
+            <SubText>These are the top 10 films that we have on the site</SubText>
             {/* <InputContainer>
               <Input
                 value={title}

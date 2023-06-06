@@ -30,24 +30,34 @@ function createExtraActions() {
         register: register(),
         getAll: getAll()
     }; 
-    
+
     function register(user) {
         return createAsyncThunk(`${name}/register`, async (user) => {
           try {
             const response = await fetchWrapper.post(`${baseUrl}/register`, user);
-            return response.data; // Return the response data if needed
+            if (response.ok) {
+              const data = await response.json();
+              return data; // Return the response data if needed
+            } else {
+              const errorMessage = await response.text();
+              throw new Error(errorMessage); // Handle the error if needed
+            }
           } catch (error) {
             throw new Error('Registration failed'); // Handle the error if needed
           }
         });
       }
-
-    // function register() {
-    //     return createAsyncThunk(
-    //         `${name}/register`,
-    //         async (user) => await fetchWrapper.post(`${baseUrl}/register`, user)
-    //     );
-    // }
+    
+    // function register(user) {
+    //     return createAsyncThunk(`${name}/register`, async (user) => {
+    //       try {
+    //         const response = await fetchWrapper.post(`${baseUrl}/register`, user);
+    //         return response.data; // Return the response data if needed
+    //       } catch (error) {
+    //         throw new Error('Registration failed'); // Handle the error if needed
+    //       }
+    //     });
+    //   }
 
     function getAll() {
         return createAsyncThunk(

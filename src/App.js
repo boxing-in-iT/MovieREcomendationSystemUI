@@ -52,7 +52,7 @@ function App() {
                     />
             <Route path="/login" element={<Login/>}/>
             {/* <Route path="/registration" element={<Registration/>}/> */}
-            <Route path="/test" element={<TestRegister/>}/>
+            <Route path="/registration" element={<TestRegister/>}/>
           </Routes>
       </ThemeProvider>
     </>

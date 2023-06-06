@@ -1,11 +1,60 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from "react";
+import {useSelector, useDispatch } from 'react-redux';
 import { userActions, alertActions } from '../../_store';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f1f1f1;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background: #f1f1f1;
+  border-radius: 5px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+`;
+
+const Label = styled.label`
+  margin-bottom: 5px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+`;
+
 
 
 // Register component
 const TestRegister = () => {
     const dispatch = useDispatch();
+    const authError = useSelector((x) => x.auth.error);
+    const [error, setError] = useState();
   
     const handleSubmit = (event) => {
       event.preventDefault();
@@ -27,40 +76,48 @@ const TestRegister = () => {
         favorites: [],
       };
   
-      dispatch(userActions.register(user));
+
+      try {
+         dispatch(userActions.register(user));
+         
+      } catch (error) {
+        setError(error.message);
+        console.error(error.message); 
+      }
     };
   
     return (
-      <div>
-        <h2>Registration</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Name:</label>
-            <input type="text" name="name" />
-          </div>
-          <div>
-            <label>Email:</label>
-            <input type="email" name="mail" />
-          </div>
-          <div>
-            <label>Birthdate:</label>
-            <input type="date" name="birth" />
-          </div>
-          <div>
-            <label>Profession:</label>
-            <input type="text" name="profession" />
-          </div>
-          <div>
-            <label>Country:</label>
-            <input type="text" name="country" />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input type="password" name="password" />
-          </div>
-          <button type="submit">Register</button>
-        </form>
-      </div>
+        <Container>
+        <Form onSubmit={handleSubmit}>
+          <h2>Registration</h2>
+          <FormGroup>
+            <Label>Name:</Label>
+            <Input type="text" name="name" />
+          </FormGroup>
+          <FormGroup>
+            <Label>Email:</Label>
+            <Input type="email" name="mail" />
+          </FormGroup>
+          <FormGroup>
+            <Label>Birthdate:</Label>
+            <Input type="date" name="birth" />
+          </FormGroup>
+          <FormGroup>
+            <Label>Profession:</Label>
+            <Input type="text" name="profession" />
+          </FormGroup>
+          <FormGroup>
+            <Label>Country:</Label>
+            <Input type="text" name="country" />
+          </FormGroup>
+          <FormGroup>
+            <Label>Password:</Label>
+            <Input type="password" name="password" />
+          </FormGroup>
+          <Button type="submit">Register</Button>
+        </Form>
+        {error && <div>{error.message}</div>}
+      </Container>
     );
   };
 
