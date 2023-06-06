@@ -1,7 +1,6 @@
-import React from 'react';
-import { useState } from "react";
-import {useSelector, useDispatch } from 'react-redux';
-import { userActions, alertActions } from '../../_store';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { userActions } from '../../_store';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -48,77 +47,76 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const Error = styled.div`
+  color: red;
+  margin-top: 10px;
+`;
 
-
-// Register component
 const TestRegister = () => {
-    const dispatch = useDispatch();
-    const authError = useSelector((x) => x.auth.error);
-    const [error, setError] = useState();
-  
-    const handleSubmit = (event) => {
-      event.preventDefault();
-  
-      const name = event.target.name.value;
-      const mail = event.target.mail.value;
-      const birth = event.target.birth.value;
-      const profession = event.target.profession.value;
-      const country = event.target.country.value;
-      const password = event.target.password.value;
-  
-      const user = {
-        name,
-        mail,
-        birth,
-        profession,
-        country,
-        password,
-        favorites: [],
-      };
-  
+  const dispatch = useDispatch();
+  const registrationError = useSelector(state => state.alert.error); // Получаем ошибку из состояния Redux
 
-      try {
-         dispatch(userActions.register(user));
-         
-      } catch (error) {
-        setError(error.message);
-        console.error(error.message); 
-      }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const name = event.target.name.value;
+    const mail = event.target.mail.value;
+    const birth = event.target.birth.value;
+    const profession = event.target.profession.value;
+    const country = event.target.country.value;
+    const password = event.target.password.value;
+
+    const user = {
+      name,
+      mail,
+      birth,
+      profession,
+      country,
+      password,
+      favorites: [],
     };
-  
-    return (
-        <Container>
-        <Form onSubmit={handleSubmit}>
-          <h2>Registration</h2>
-          <FormGroup>
-            <Label>Name:</Label>
-            <Input type="text" name="name" />
-          </FormGroup>
-          <FormGroup>
-            <Label>Email:</Label>
-            <Input type="email" name="mail" />
-          </FormGroup>
-          <FormGroup>
-            <Label>Birthdate:</Label>
-            <Input type="date" name="birth" />
-          </FormGroup>
-          <FormGroup>
-            <Label>Profession:</Label>
-            <Input type="text" name="profession" />
-          </FormGroup>
-          <FormGroup>
-            <Label>Country:</Label>
-            <Input type="text" name="country" />
-          </FormGroup>
-          <FormGroup>
-            <Label>Password:</Label>
-            <Input type="password" name="password" />
-          </FormGroup>
-          <Button type="submit">Register</Button>
-        </Form>
-        {error && <div>{error.message}</div>}
-      </Container>
-    );
+
+    try {
+      await dispatch(userActions.register(user));
+    } catch (error) {
+      console.log('Error:', error);
+    }
   };
 
-  export default TestRegister;
+  return (
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <h2>Registration</h2>
+        {registrationError && <Error>{registrationError}</Error>} {/* Выводим ошибку, если она есть */}
+        <FormGroup>
+          <Label>Name:</Label>
+          <Input type="text" name="name" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Email:</Label>
+          <Input type="email" name="mail" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Birthdate:</Label>
+          <Input type="date" name="birth" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Profession:</Label>
+          <Input type="text" name="profession" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Country:</Label>
+          <Input type="text" name="country" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Password:</Label>
+          <Input type="password" name="password" />
+        </FormGroup>
+        <Button type="submit">Register</Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default TestRegister;
+
