@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { userActions } from '../../_store';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
-const Container = styled.div`
+
+const RegisterPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f1f1f1;
+  background-color: ${(props) => props.theme.text};
 `;
 
-const Form = styled.form`
+const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -47,70 +50,105 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Error = styled.div`
-  color: red;
-  margin-top: 10px;
+const CancelButton = styled(Link)`
+  padding: 10px;
+  color: #007bff;
+  text-decoration: none;
+  border-radius: 3px;
+  cursor: pointer;
 `;
 
 const TestRegister = () => {
-  const dispatch = useDispatch();
+  // form validation rules
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    mail: Yup.string().email("Invalid email").required("Email is required"),
+    birth: Yup.date().required("Birthdate is required"),
+    profession: Yup.string().required("Profession is required"),
+    country: Yup.string().required("Country is required"),
+    password: Yup.string().required("Password is required"),
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  // get functions to build form with useForm() hook
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors, isSubmitting } = formState;
 
-    const name = event.target.name.value;
-    const mail = event.target.mail.value;
-    const birth = event.target.birth.value;
-    const profession = event.target.profession.value;
-    const country = event.target.country.value;
-    const password = event.target.password.value;
-
-    const user = {
-      name,
-      mail,
-      birth,
-      profession,
-      country,
-      password,
-      favorites: [],
-    };
-
-      await dispatch(userActions.register(user));
-  };
+  function onSubmit(data) {
+    console.log(data); // Handle form submission
+  }
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <h2>Registration</h2>
+    <RegisterPageContainer>
+      <RegisterForm onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
-          <Label>Name:</Label>
-          <Input type="text" name="name" />
+          <Label>Name</Label>
+          <Input
+            name="name"
+            type="text"
+            {...register("name")}
+            className={`${errors.name ? 'is-invalid' : ''}`}
+          />
+          {errors.name && <div className="invalid-feedback">{errors.name?.message}</div>}
         </FormGroup>
         <FormGroup>
           <Label>Email:</Label>
-          <Input type="email" name="mail" />
+          <Input
+            name="mail"
+            type="text"
+            {...register("mail")}
+            className={`${errors.mail ? 'is-invalid' : ''}`}
+          />
+          {errors.mail && <div className="invalid-feedback">{errors.mail?.message}</div>}
         </FormGroup>
         <FormGroup>
           <Label>Birthdate:</Label>
-          <Input type="date" name="birth" />
+          <Input
+            name="birth"
+            type="date"
+            {...register("birth")}
+            className={`${errors.birth ? 'is-invalid' : ''}`}
+          />
+          {errors.birth && <div className="invalid-feedback">{errors.birth?.message}</div>}
         </FormGroup>
         <FormGroup>
           <Label>Profession:</Label>
-          <Input type="text" name="profession" />
+          <Input
+            name="profession"
+            type="text"
+            {...register("profession")}
+            className={`${errors.profession ? 'is-invalid' : ''}`}
+          />
+          {errors.profession && <div className="invalid-feedback">{errors.profession?.message}</div>}
         </FormGroup>
         <FormGroup>
           <Label>Country:</Label>
-          <Input type="text" name="country" />
+          <Input
+            name="country"
+            type="text"
+            {...register("country")}
+            className={`${errors.country ? 'is-invalid' : ''}`}
+          />
+          {errors.country && <div className="invalid-feedback">{errors.country?.message}</div>}
         </FormGroup>
         <FormGroup>
-          <Label>Password:</Label>
-          <Input type="password" name="password" />
+          <Label>Password</Label>
+          <Input
+            name="password"
+            type="password"
+            {...register("password")}
+            className={`${errors.password ? 'is-invalid' : ''}`}
+          />
+          {errors.password && <div className="invalid-feedback">{errors.password?.message}</div>}
         </FormGroup>
-        <Button type="submit">Register</Button>
-      </Form>
-    </Container>
+        <Button disabled={isSubmitting}>
+          {isSubmitting && <span className="spinner-border spinner-border-sm me-1"></span>}
+          Register
+        </Button>
+        <CancelButton to="../login">Cancel</CancelButton>
+      </RegisterForm>
+    </RegisterPageContainer>
   );
-};
-
+}
 export default TestRegister;
 
