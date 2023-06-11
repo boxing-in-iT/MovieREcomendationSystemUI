@@ -4,6 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { userActions, alertActions } from '../../_store';
+import { history } from '../../_helpers';
 
 
 const RegisterPageContainer = styled.div`
@@ -59,6 +62,8 @@ const CancelButton = styled(Link)`
 `;
 
 const TestRegister = () => {
+
+  const dispatch = useDispatch();
   // form validation rules
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -74,9 +79,18 @@ const TestRegister = () => {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
 
-  function onSubmit(data) {
-    console.log(data); // Handle form submission
-  }
+  async function onSubmit(data) {
+    dispatch(alertActions.clear());
+    try {
+        await dispatch(userActions.register({...data, favorites:[]})).unwrap();
+
+        // redirect to login page and display success alert
+        history.navigate('/account/login');
+        dispatch(alertActions.success({ message: 'Registration successful', showAfterRedirect: true }));
+    } catch (error) {
+        dispatch(alertActions.error(error));
+    }
+}
 
   return (
     <RegisterPageContainer>
