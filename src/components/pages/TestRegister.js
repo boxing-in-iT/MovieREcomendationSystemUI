@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -61,9 +61,23 @@ const CancelButton = styled(Link)`
   cursor: pointer;
 `;
 
+const ErrorContainer = styled.div`
+  background-color: #ffcccc;
+  padding: 10px;
+  border: 1px solid #ff99a8;
+  border-radius: 4px;
+  margin-bottom: 10px;
+`;
+
+const ErrorMessage = styled.p`
+  color: #ff0000;
+  margin: 0;
+`;
+
 const TestRegister = () => {
 
   const dispatch = useDispatch();
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -79,21 +93,32 @@ const TestRegister = () => {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   async function onSubmit(data) {
+    debugger;
     dispatch(alertActions.clear());
     try {
         await dispatch(userActions.register({...data, favorites:[]})).unwrap();
 
         // redirect to login page and display success alert
-        history.navigate('/account/login');
+        history.navigate('/login');
         dispatch(alertActions.success({ message: 'Registration successful', showAfterRedirect: true }));
     } catch (error) {
+        console.log(error.message);
+        setErrorMessage(error.message);
         dispatch(alertActions.error(error));
+        
     }
 }
 
   return (
     <RegisterPageContainer>
+    {errorMessage && (
+        <ErrorContainer>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        </ErrorContainer>
+      )}
       <RegisterForm onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <Label>Name</Label>
