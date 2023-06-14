@@ -6,6 +6,11 @@ import dataSet from "../../assets/data/tmdb_5000_movies.csv";
 import dataSet2 from "../../assets/data/tmdb_5000_credits.csv";
 import { Link } from "react-router-dom";
 import ListComponent from "../List";
+import Button from "components/Button";
+
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { favoritesActions } from "../../_store";
 
 const MovieDirector = styled.p`
   font-size: 0.9rem;
@@ -115,14 +120,66 @@ const SubText = styled.p`
   }
 `;
 
+const Btn = styled.button`
+  display: inline-block;
+  background-color: transparent;
+  color: #d5ff10;
+  outline: none;
+  border: 1px solid #d5ff10;
+
+  font-size: ${(props) => props.theme.fontsm};
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 900;
+
+  text-align: center;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  &:hover {
+    color: #000000;
+    transform: scale(0.9);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #d5ff10;
+  }
+`;
+
 const MovieDetail = () => {
   const { id } = useParams();
 
   const [movie, setMovie] = useState({});
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [recommendations, setRecommendations] = useState([]);
+
+
+
+  const dispatch = useDispatch();
+  const { user: authUser } = useSelector(x => x.auth);
+  const { isFavorite } = useSelector(state => state.favs);
+
+  useEffect(() => {
+    dispatch(favoritesActions.isFavorite(authUser.id, id));
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
+  const [userData, setUserData] = useState({
+    userId: "",
+    movieId: "",
+  });
+  
+  
+ // const authUser = useSelector(x => x.auth.user);
+ // const dispatch = useDispatch();
 
   useEffect(() => {
     Papa.parse(dataSet, {
@@ -145,6 +202,7 @@ const MovieDetail = () => {
         setMovie(modifiedResults.find((movie) => movie.id === id));
       },
     });
+
     setIsLoading(false);
 
     Papa.parse(dataSet2, {
@@ -158,16 +216,6 @@ const MovieDetail = () => {
         setData(dataJson);
       },
     });
-
-    // Papa.parse(dataSet2.replace(/'/g, '"'), {
-    //   download: true,
-    //   header: true,
-    //   complete: function (results) {
-    //     const res = results.data.find((cast) => cast.id === id);
-    //     const castData = res;
-    //     setData(castData);
-    //   },
-    // });
   }, [id]);
 
   useEffect(() => {
@@ -193,10 +241,17 @@ const MovieDetail = () => {
     }
   }, [movie]);
 
-  const Test = () => {
-    console.log(data);
-    console.log(typeof data);
-  };
+  useEffect(() => {
+    dispatch(favoritesActions.isFavorite({ userId: authUser.id, movieId: id }));
+  }, [id, authUser.id]);
+
+  async function handleClick(userId, movieId){
+    return dispatch(favoritesActions.addToFavorites({userId, movieId}));
+  }
+
+  // const handleClick = () => {
+  //   console.log(authUser, id)
+  // }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -238,7 +293,11 @@ const MovieDetail = () => {
                   .join(", ")}
               <p>Overview: {movie.overview}</p>
             </SubText>
-            <button onClick={Test}>Click</button>
+            {authUser && !isFavorite && (
+              <Btn type="button" onClick={() => handleClick(authUser.id, id)}>
+                Add to favorites
+              </Btn>
+            )}
           </Box>
           <Box>
             <ListComponent movies={recommendations} />

@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from "react";
 
-import { authActions } from '_store';
+import { authActions, userActions } from '_store';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -21,9 +22,11 @@ const AuthButton = styled.button`
 `;
 
 const AuthorButton = () => {
-    const authUser = useSelector(x => x.auth.user);
+    //const authUser = useSelector(x => x.auth.user);
     const dispatch = useDispatch();
     const logout = () => dispatch(authActions.logout());
+
+    const { user: authUser } = useSelector(x => x.auth);
 
     // only show nav when logged in
     if (!authUser){
@@ -38,6 +41,7 @@ const AuthorButton = () => {
 
     return(
         <AuthButtons>
+        <h1>{authUser?.name}</h1>
                 <button onClick={logout} className="btn btn-link nav-item nav-link">Logout</button>
         </AuthButtons>
     )

@@ -16,35 +16,20 @@ const Recommendations = () => {
 
   useEffect(() => {
     dispatch(userActions.getAll());
-    
+    dispatch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
-
-return (
-  <div>
-      <h1>Hi {authUser?.name}!</h1>
-      {users.length &&
-          <ul>
-              {users.map(user =>
-                  <li key={user.id}> {user.name}</li>
-              )}
-          </ul>
-      }
-      {users.loading && <div className="spinner-border spinner-border-sm"></div>}
-      {users.error && <div className="text-danger">Error loading users: {users.error.message}</div>}
-  </div>
-);
-  // if (recMovies == null) {
-  //   return (
-  //     <>
-  //       <Section>
-  //         <EmptyPage />
-  //       </Section>
-  //     </>
-  //   );
-  // } else {
-  //   return <></>;
-  // }
+  if (recMovies == null) {
+    return (
+      <>
+        <Section>
+          <EmptyPage />
+        </Section>
+      </>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default Recommendations;

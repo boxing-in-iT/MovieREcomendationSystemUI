@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "./Button";
+import { useDispatch, useSelector } from "react-redux";
 
 const EmptyPageContainer = styled.div`
   display: flex;
@@ -45,12 +46,16 @@ const ButtonContainer = styled.div``;
 //   }
 // `;
 const EmptyPage = () => {
+
+  const dispatch = useDispatch();
+  const {user: authUser} = useSelector(x => x.auth);
+
   return (
     <>
       <EmptyPageContainer>
         <TextContainer>
           <p>
-            Sorry, we do not have recommendations specifically for you, since
+            Sorry, {authUser?.name} we do not have recommendations specifically for you, since
             you have not previously marked films that you liked.
           </p>
           <p>Please go to the movie library and select the movies you like.</p>
