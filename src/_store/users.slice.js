@@ -21,7 +21,7 @@ export const usersReducer = slice.reducer;
 function createInitialState() {
     return {
         list: null,
-        item: null
+        item: null, 
     }
 }
 

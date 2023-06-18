@@ -166,10 +166,20 @@ const MovieDetail = () => {
   const { user: authUser } = useSelector(x => x.auth);
   const { isFavorite } = useSelector(state => state.favs);
 
+  useEffect(() => {
+    dispatch(favoritesActions.isFavorite(authUser.id, id));
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
   const [userData, setUserData] = useState({
     userId: "",
     movieId: "",
   });
+  
+  
+ // const authUser = useSelector(x => x.auth.user);
+ // const dispatch = useDispatch();
 
   useEffect(() => {
     Papa.parse(dataSet, {
@@ -232,12 +242,18 @@ const MovieDetail = () => {
   }, [movie]);
 
   useEffect(() => {
-      dispatch(favoritesActions.isFavorite({ userId: authUser?.id, movieId: id }));
-  }, [id, authUser?.id]);
+    if (authUser && authUser.id) {
+      dispatch(favoritesActions.isFavorite(authUser.id, id));
+    }
+  }, [id, authUser.id]);
 
   async function handleClick(userId, movieId){
     return dispatch(favoritesActions.addToFavorites({userId, movieId}));
   }
+
+  // const handleClick = () => {
+  //   console.log(authUser, id)
+  // }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -280,7 +296,7 @@ const MovieDetail = () => {
               <p>Overview: {movie.overview}</p>
             </SubText>
             {authUser && !isFavorite && (
-              <Btn type="button" onClick={() => handleClick(authUser?.id, id)}>
+              <Btn type="button" onClick={() => handleClick(authUser.id, id)}>
                 Add to favorites
               </Btn>
             )}

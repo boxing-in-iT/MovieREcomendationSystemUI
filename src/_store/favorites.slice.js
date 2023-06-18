@@ -15,7 +15,8 @@ function createInitialState() {
     return {
         list: null,
         item: null,
-        isFavorite: false
+        isFavorite: false,
+        favs: {}
     }
 }
 
@@ -25,7 +26,8 @@ function createExtraActions() {
     return{
         addToFavorites:addToFavorites(),
         isFavorite:isFavorite(),
-        getByUserId:getByUserId()
+        getByUserId:getByUserId(),
+        delete: _delete()
     }
 
     function addToFavorites(){
@@ -44,15 +46,24 @@ function createExtraActions() {
 
     function getByUserId(){
         return createAsyncThunk(
-            `${name}`,
-            async(id) =>await fetchWrapper.get(`${baseUrl}/${id}`)
+            `${name}/`,
+            async(userId) =>await fetchWrapper.get(`${baseUrl}/${userId}`)
         )
+    }
+
+    function _delete() {
+        return createAsyncThunk(
+            `${name}/delete`,
+            async ({userId,movieId}) => await fetchWrapper.delete(`${baseUrl}/${userId}/${movieId}`)
+        );
     }
 }
 
 function createExtraReducers() {
     return {
-        ...isFavorite()
+        ...isFavorite(),
+        ...getByUserId(),
+        // ..._delete()
     };
 
     function isFavorite() {
@@ -66,51 +77,38 @@ function createExtraReducers() {
             }
         };
     }
+
+    function getByUserId(){
+        var{pending, fulfilled, rejected} = extraActions.getByUserId;
+        return {
+            [pending]: (state) => {
+                state.favs = { loading: false };
+            },
+            [fulfilled]: (state, action) => {
+                state.favs = action.payload;
+            },
+            [rejected]: (state, action) => {
+                state.favs = { error: action.error };
+            }
+        };
+                
+    }
+
+    // function _delete() {
+    //     var { pending, fulfilled, rejected } = extraActions.delete;
+    //     return{
+    //         [pending]:(state, action)=>{
+    //             const user = state.list.value.find(x => x.id === action.meta.arg);
+    //             user.isDeleting = true;
+    //         },
+    //         [fulfilled]: (state,action) => {
+    //             state.list.value = state.list.value.filter(x => x.id !== action.meta.arg);
+    //         },
+    //         [rejected]: (state, action) => {
+    //             const user = state.list.value.find(x => x.id === action.meta.arg);
+    //             user.isDeleting = false;
+    //         }
+    //     }
+        
+    // }
 }
-
-// function createExtraReducers() {
-//     return {
-//         // ... остальные обработчики
-
-//         [isFavorite.pending]: (state) => {
-//             state.isFavorite = false; // Устанавливаем значение isFavorite в false перед загрузкой
-//         },
-//         [isFavorite.fulfilled]: (state, action) => {
-//             state.isFavorite = action.payload; // Устанавливаем значение isFavorite на основе полученных данных
-//         }
-//     };
-// }
-
-
-    
-
-    // return {
-    //     addToFavorites: createAsyncThunk(
-    //         `${name}/addToFavorites`,
-    //         async ({ userId, movieId }) => await fetchWrapper.post(`${baseUrl}/addToFavorites`, { userId, movieId })
-    //     ),
-    //     isFavorite: createAsyncThunk(
-    //         `${name}/isFavorite`,
-    //         async ({ userId, movieId }) => await fetchWrapper.get(`${baseUrl}/isFavorite?userId=${userId}&movieId=${movieId}`)
-    //     )
-    // };
-
-
-
-// function createExtraReducers() {
-//     return {
-//         ...isFavorite()
-//     };
-
-//     function isFavorite() {
-//         var { pending, fulfilled, rejected } = extraActions.isFavorite;
-//         return {
-//             [pending]: (state) => {
-//                 state.isFavorite = { loading: false };
-//             },
-//             [fulfilled]: (state, action) => {
-//                 state.isFavorite = action.payload;
-//             }
-//         };
-//     }
-// }

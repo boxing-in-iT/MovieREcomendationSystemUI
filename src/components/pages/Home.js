@@ -221,15 +221,6 @@ const Home = () => {
           <Box>
             <Title>Welcome on IDBM</Title>
             <SubText>These are the top 10 films that we have on the site</SubText>
-            {/* <InputContainer>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              ></Input>
-            </InputContainer> */}
-            {/* <ButtonContainer>
-              <Button text={"Enter"} type="button" />
-            </ButtonContainer> */}
           </Box>
           <Box>
             <ListComponent movies={topMovies} />

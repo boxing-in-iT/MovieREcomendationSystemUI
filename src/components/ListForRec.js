@@ -3,13 +3,18 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
+const Container = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
 const ListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
 
 const ListColumn = styled.div`
-  flex-basis: 40%;
+  flex-basis: 33.33%;
   padding: 1rem;
 
   @media screen and (max-width: 768px) {
@@ -37,32 +42,23 @@ const MovieItem = styled.p`
   margin-bottom: 0.5rem;
 `;
 
-const ListComponent = ({ movies }) => {
-  const numMoviesPerColumn = Math.ceil(movies.length / 2);
+const ListForRe = ({ movies }) => {
   return (
-    <>
+    <Container>
       <ListContainer>
-        <ListColumn>
-          {movies.slice(0, numMoviesPerColumn).map((movie, index) => (
-            <Link to={`/movies/${movie.id}`}>
-              <ListItem key={index}>
+        {movies.map((movie, index) => (
+          <Link to={`/movies/${movie.id}`} key={index}>
+            <ListColumn>
+              <ListItem>
                 <MovieTitle>{movie.title}</MovieTitle>
               </ListItem>
-            </Link>
-          ))}
-        </ListColumn>
-        <ListColumn>
-          {movies.slice(numMoviesPerColumn).map((movie, index) => (
-            <Link to={`/movies/${movie.id}`}>
-              <ListItem key={index}>
-                <MovieTitle>{movie.title}</MovieTitle>
-              </ListItem>
-            </Link>
-          ))}
-        </ListColumn>
+            </ListColumn>
+          </Link>
+        ))}
       </ListContainer>
-    </>
+    </Container>
   );
 };
 
-export default ListComponent;
+export default ListForRe;
+
